@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator finansowy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Kalkulator finansowy</h1>
+
+    <div class="formularz">
+        <label for="kwota">Kwota pożyczki:</label>
+        <input type="number" id="kwota" min="0" step="1" required>
+
+        <label for="oprocentowanie">Oprocentowanie roczne:</label>
+        <input type="number" id="oprocentowanie" min="0" step="0.01" required>
+
+        <label for="okres_spłaty">Okres spłaty (w miesiącach):</label>
+        <input type="number" id="okres_spłaty" min="1" required>
+
+        <label for="data_pierwszej_spłaty">Data pierwszej spłaty:</label>
+        <input type="date" id="data_pierwszej_spłaty" required>
+
+        <button onclick="oblicz()">Oblicz</button>
+    </div>
+
+    <div class="wyniki">
+        <h2>Szczegóły spłaty:</h2>
+        <p>Rata miesięczna: <span id="rata_miesieczna"></span></p>
+        <p>Całkowity koszt odsetek: <span id="koszt_odsetek"></span></p>
+        <p>Harmonogram spłat:</p>
+        <table id="harmonogram">
+            <thead>
+                <tr>
+                    <th>Miesiąc</th>
+                    <th>Kapitał</th>
+                    <th>Odsetki</th>
+                    <th>Pozostała kwota</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="historia">
+        <h2>Historia płatności:</h2>
+        <table id="historia_płatności">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Kwota</th>
+                    <th>Pozostała kwota</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

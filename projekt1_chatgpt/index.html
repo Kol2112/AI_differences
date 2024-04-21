@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Finansowy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .calculator {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #payment-dates {
+            margin-top: 20px;
+        }
+        #payment-history {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h2>Kalkulator Finansowy</h2>
+        <label for="principal">Kwota pożyczki/kredytu:</label>
+        <input type="number" id="principal" placeholder="Kwota" min="0" required><br>
+        <label for="interest">Oprocentowanie roczne (%):</label>
+        <input type="number" id="interest" placeholder="Oprocentowanie" min="0" max="100" step="0.01" required><br>
+        <label for="months">Liczba miesięcy spłaty:</label>
+        <input type="number" id="months" placeholder="Liczba miesięcy" min="1" required><br>
+        <label for="start-date">Data pierwszej spłaty:</label>
+        <input type="date" id="start-date" required><br>
+        <button onclick="calculate()">Oblicz</button>
+        <div id="result"></div>
+        <div id="payment-dates"></div>
+        <div id="payment-history"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            var principal = parseFloat(document.getElementById('principal').value);
+            var interest = parseFloat(document.getElementById('interest').value) / 100 / 12; // Oprocentowanie miesięczne
+            var months = parseInt(document.getElementById('months').value);
+            var startDate = new Date(document.getElementById('start-date').value);
+
+            // Obliczanie dat płatności
+            var paymentDates = [];
+            var paymentHistory = [];
+            for (var i = 0; i < months; i++) {
+                var date = new Date(startDate.getFullYear(), startDate.getMonth() + i, 1);
+                paymentDates.push(date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' }));
+                var x = Math.pow(1 + interest, i + 1);
+                var monthlyPayment = (principal * x * interest) / (x - 1);
+                paymentHistory.push({
+                    date: date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    amount: monthlyPayment.toFixed(2)
+                });
+            }
+
+            // Wyświetlanie wyniku i dat płatności
+            var resultElement = document.getElementById('result');
+            var paymentDatesElement = document.getElementById('payment-dates');
+            var paymentHistoryElement = document.getElementById('payment-history');
+
+            resultElement.innerHTML = 'Miesięczna rata: ' + paymentHistory[0].amount + ' PLN';
+
+            paymentDatesElement.innerHTML = '<h3>Daty płatności:</h3><ul>';
+            paymentDates.forEach(function(date) {
+                paymentDatesElement.innerHTML += '<li>' + date + '</li>';
+            });
+            paymentDatesElement.innerHTML += '</ul>';
+
+            // Wyświetlanie historii płatności
+            paymentHistoryElement.innerHTML = '<h3>Historia płatności:</h3><ul>';
+            paymentHistory.forEach(function(payment) {
+                paymentHistoryElement.innerHTML += '<li>Data: ' + payment.date + ', Kwota: ' + payment.amount + ' PLN</li>';
+            });
+            paymentHistoryElement.innerHTML += '</ul>';
+        }
+    </script>
+</body>
+</html>
